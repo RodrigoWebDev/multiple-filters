@@ -2,6 +2,7 @@ var gulp = require("gulp");
 var clean = require("gulp-clean");
 var usemin = require("gulp-usemin");
 var uglify = require("gulp-uglify");
+var run = require("gulp-run-command").default;
 
 gulp.task("clean", function () {
     return gulp.src("dist")
@@ -29,5 +30,7 @@ gulp.task("usemin", function () {
         }))
         .pipe(gulp.dest("dist"));
 });
+
+gulp.task("server", run("browser-sync src -w"));
 
 

@@ -17,7 +17,7 @@ npm install
 Installs all project dependencies
 
 ```bash
-npm run dev
+npm run gulp server
 ```
 Starts browser-sync for agile development
 
