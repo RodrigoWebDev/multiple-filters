@@ -1,25 +1,15 @@
 {
   "name": "front-end-boilerplate",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
+  "repository": "https://github.com/RodrigoWebDev/front-end-boilerplate.git",
+  "author": "rodrigowebdev <rodrigo.queiroz.chagas@gmail.com>",
+  "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "gulp": "gulp",
-    "dev": "browser-sync src -w"
+    "dev": "parcel ./src/index.html"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {},
   "devDependencies": {
-    "browser-sync": "^2.26.3",
-    "gulp": "^3.9.0",
-    "gulp-clean": "^0.3.1",
-    "gulp-html-replace": "^1.6.2",
-    "gulp-run-command": "0.0.9",
-    "gulp-uglify": "^3.0.1",
-    "gulp-usemin": "^0.3.29",
-    "sass": "^1.16.0"
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.26.5"
   }
 }

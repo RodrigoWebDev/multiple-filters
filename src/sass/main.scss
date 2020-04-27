@@ -1,12 +1,19 @@
+$desktop: 768px;
+$txt-color: rgba(0,0,0,.7);
+
 *{
     margin: 0;
     padding:0;
     box-sizing: border-box;
 }
 
+html{
+  scroll-behavior: smooth;
+}
+
 body{
     font-family: Arial, Helvetica, sans-serif;
-    color: rgba(0,0,0,.7);
+    color: $txt-color;
 }
 
 img{
@@ -17,9 +24,5 @@ img{
 .container{
     max-width: 1366px;
     margin: 0 auto;
-}
-
-/******************************** DESKTOP ********************************/
-@media(min-width:768px){
-
+    padding: 0 16px;
 }
