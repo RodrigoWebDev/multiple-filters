@@ -1,9 +1,14 @@
 import { useState, useEffect, Fragment } from "react"
+import { useMediaQuery } from 'react-responsive'
 import Card from "./Card.js"
+import Filters from "./Filters.js"
 import productList from "../products"
 
 const App = () => {
   const [firstRender, setFirstRender] = useState(true)
+  const isDesktop = useMediaQuery({
+    query: '(min-width: 1000px)'
+  })
   const [products, setProducts] = useState([...productList])
   const [filters, setFilters] = useState([
     {
@@ -78,56 +83,30 @@ const App = () => {
   }, [filters])
 
   return (
-    <div className="d-flex">
-      <aside>
+    <div className="d-flex flex-column">
+      <aside className="mb-4">
         <section>
           <h2 className="mb-4">Filters</h2>
 
-          {filters.map(({
-            name
-          }) => (
-            <Fragment key={name}>
-              <h4>{name}</h4>
-              <ul className="list-group list-group-flush">
-                {getFilter(name).map(item => (
-                  <li 
-                    key={item} 
-                    className="list-group-item"
-                    title={item}
-                  >
-                    <label 
-                      className="text-truncate"
-                      style={{ width: "180px"}}
-                    >
-                      <input 
-                        type="checkbox" 
-                        value={item} 
-                        class="me-2"
-                        onChange={(e) => {
-                          updateFilterValues(
-                            name,
-                            e.target.checked,
-                            e.target.value
-                          )
-                        }}/>
-                      <span>{ item }</span>
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </Fragment>
-          ))}
+          <Filters 
+            filters={filters} 
+            getFilter={getFilter}
+            updateFilterValues={updateFilterValues}
+          /> 
         </section>
       </aside>
 
       <main>
-        <ul>
+        <ul className="list-unstyled">
           {products.length ? products.map(({
             title,
             thumbnail,
             description
           }) => 
-            <li key={title}>
+            <li 
+              key={title}
+              className="mb-4"
+            >
               <Card 
                 title={title}
                 image={thumbnail}
