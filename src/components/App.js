@@ -19,8 +19,14 @@ const App = () => {
       name: "category",
       values: []
     },
-  ]
-)
+  ])
+
+  const css = {
+    container: `d-flex ${isDesktop ? "flex-row" : "flex-column"}`,
+    productList: `list-unstyled ${isDesktop ? "d-flex flex-wrap" : ""}`,
+    productItem: `mb-4`,
+    aside: `mb-4 ${isDesktop ? "pe-4" : ""}`
+  }
 
   const getFilter = (name) => {
     const values = productList.map(item => item[name])
@@ -83,8 +89,8 @@ const App = () => {
   }, [filters])
 
   return (
-    <div className="d-flex flex-column">
-      <aside className="mb-4">
+    <div className={css.container}>
+      <aside className={css.aside}>
         <section>
           <h2 className="mb-4">Filters</h2>
 
@@ -97,7 +103,7 @@ const App = () => {
       </aside>
 
       <main>
-        <ul className="list-unstyled">
+        <ul className={css.productList}>
           {products.length ? products.map(({
             title,
             thumbnail,
@@ -105,7 +111,11 @@ const App = () => {
           }) => 
             <li 
               key={title}
-              className="mb-4"
+              className={css.productItem}
+              style={{
+                width: isDesktop ? "31%" : "100%",
+                margin: isDesktop ? "0 1%" : ""
+              }}
             >
               <Card 
                 title={title}
