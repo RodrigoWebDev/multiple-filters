@@ -6,6 +6,7 @@ interface ICard {
   description: string
   className?: string
   style?: any
+  isDesktop: boolean
 }
 
 const Card = ({ 
@@ -13,13 +14,14 @@ const Card = ({
   title, 
   description,
   className,
-  style
+  style,
+  isDesktop
 }: ICard) => {
   return (
     <div className={`card ${className}`} style={style}>
       <div style={{
-        maxHeight: '200px',
-        overflow: 'hidden',
+        maxHeight: isDesktop ? '200px' : "",
+        overflow: isDesktop ? 'hidden' : "",
       }}>
         <img src={image} className="card-img-top" alt={title} />
       </div>

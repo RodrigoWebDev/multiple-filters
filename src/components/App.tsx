@@ -88,39 +88,55 @@ const App = () => {
   }, [filters])
 
   return (
-    <div className={css.container}>
-      <aside className={css.aside}>
-        <section>
-          <h2 className="mb-4">Filters</h2>
+    <div>
+      <div className={css.container}>
+        <aside 
+          className={css.aside}
+          style={{
+            width: isDesktop ? "30%" : "100%"
+          }}
+        >
+          <section>
+            <Filters 
+              filters={filters} 
+              getFilter={getFilter}
+              updateFilterValues={updateFilterValues}
+            /> 
+          </section>
+        </aside>
 
-          <Filters 
-            filters={filters} 
-            getFilter={getFilter}
-            updateFilterValues={updateFilterValues}
-          /> 
-        </section>
-      </aside>
+        <main
+          style={{
+            width: isDesktop ? "70%" : "100%"
+          }}
+        >
+          <ul className={css.productList}>
+            {products.length ? products.map(({
+              title,
+              thumbnail,
+              description
+            }) => 
+              <Card 
+                title={title}
+                image={thumbnail}
+                description={description}
+                className={css.productItem}
+                style={{
+                  width: isDesktop ? "31%" : "100%",
+                  margin: isDesktop ? "0 1%" : ""
+                }}
+                isDesktop={isDesktop}
+                key={title}
+              />
+            ): <h2>No products for the giving filters</h2>}
+          </ul>
+        </main>
+      </div>
 
-      <main>
-        <ul className={css.productList}>
-          {products.length ? products.map(({
-            title,
-            thumbnail,
-            description
-          }) => 
-            <Card 
-              title={title}
-              image={thumbnail}
-              description={description}
-              className={css.productItem}
-              style={{
-                width: isDesktop ? "31%" : "100%",
-                margin: isDesktop ? "0 1%" : ""
-              }}
-            />
-          ): <h2>No products for the giving filters</h2>}
-        </ul>
-      </main>
+      <hr />
+      <footer className="text-center">
+        Made by <a className="link-primary" href="https://github.com/RodrigoWebDev" target="_blank">Rodrigo Queiroz</a>, source code at <a className="link-primary" href="https://github.com/RodrigoWebDev/multiple-filters" target="_blank">GitHub</a>
+      </footer>
     </div>
   )
 }
