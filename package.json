@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "start": "parcel ./src/index.html",
-    "build": "parcel build ./src/index.html"
+    "qa": "parcel ./dist/index.html",
+    "build": "parcel build ./src/index.html",
+    "postbuild": "purgecss --css dist/*.css --content dist/index.html dist/*.js --output dist/index.css"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,8 @@
   "homepage": "https://github.com/RodrigoWebDev/multiple-filters#readme",
   "devDependencies": {
     "parcel": "^2.8.2",
-    "process": "^0.11.10"
+    "process": "^0.11.10",
+    "purgecss": "^5.0.0"
   },
   "dependencies": {
     "bootstrap": "^5.2.3",
