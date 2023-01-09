@@ -1,7 +1,7 @@
-import { useState, useEffect, Fragment } from "react"
+import React, { useState, useEffect, Fragment } from "react"
 import { useMediaQuery } from 'react-responsive'
-import Card from "./Card.js"
-import Filters from "./Filters.js"
+import Card from "./Card"
+import Filters from "./Filters"
 import productList from "../products"
 
 const App = () => {
@@ -12,29 +12,29 @@ const App = () => {
   const [products, setProducts] = useState([...productList])
   const [filters, setFilters] = useState([
     {
-      name: "brand",
+      name: "category",
       values: []
     },
     {
-      name: "category",
+      name: "brand",
       values: []
     },
   ])
 
   const css = {
     container: `d-flex ${isDesktop ? "flex-row" : "flex-column"}`,
-    productList: `list-unstyled ${isDesktop ? "d-flex flex-wrap" : ""}`,
+    productList: `list-unstyled card-deck ${isDesktop ? "d-flex flex-wrap" : ""}`,
     productItem: `mb-4`,
     aside: `mb-4 ${isDesktop ? "pe-4" : ""}`
   }
 
-  const getFilter = (name) => {
+  const getFilter = (name): string[] => {
     const values = productList.map(item => item[name])
     const noDuplicatedValues = [...new Set(values)];
     return noDuplicatedValues
   }
 
-  const updateFilterValues = (name, checked, value) => {
+  const updateFilterValues = (name: string, checked: boolean, value: string) => {
     if(checked){
       const newFilters = filters.map(filter => ({
         ...filter,
@@ -42,7 +42,6 @@ const App = () => {
       }))
       setFilters(newFilters)
     }else{
-      debugger
       const newFilters = filters.map(filter => ({
         ...filter,
         values: filter.values.filter(item => item !== value)
@@ -53,17 +52,17 @@ const App = () => {
 
   const updateProductsWithFilters = () => {
     const filteredProducts = productList.filter(product => {
-      const brandFilter = () => {
+      const categoryFilter = () => {
         if(filters[0].values.length){
-          return filters[0].values.some(value => value === product.brand)
+          return filters[0].values.some(value => value === product.category)
         }else{
           return true
         }
       }
 
-      const categoryFilter = () => {
+      const brandFilter = () => {
         if(filters[1].values.length){
-          return filters[1].values.some(value => value === product.category)
+          return filters[1].values.some(value => value === product.brand)
         }else{
           return true
         }
@@ -109,20 +108,16 @@ const App = () => {
             thumbnail,
             description
           }) => 
-            <li 
-              key={title}
+            <Card 
+              title={title}
+              image={thumbnail}
+              description={description}
               className={css.productItem}
               style={{
                 width: isDesktop ? "31%" : "100%",
                 margin: isDesktop ? "0 1%" : ""
               }}
-            >
-              <Card 
-                title={title}
-                image={thumbnail}
-                description={description}
-              />
-            </li>
+            />
           ): <h2>No products for the giving filters</h2>}
         </ul>
       </main>

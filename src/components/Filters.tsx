@@ -1,16 +1,25 @@
-import { Fragment } from "react"
+import React from "react"
+
+interface IFilters {
+  filters: {
+    name: string
+    values: string[]
+  }[]
+  updateFilterValues: (name: string, checked: boolean, value: string) => void
+  getFilter: (name: string) => string[]
+}
 
 const Filters = ({ 
   filters, 
   updateFilterValues,
   getFilter
-}) => {
+}: IFilters) => {
   return (
     <>
       {filters.map(({
         name
       }) => (
-        <Fragment key={name}>
+        <div key={name}>
           <h4 className="text-capitalize my-4">{name}</h4>
           <ul className="list-group list-group-flush">
             {getFilter(name).map(item => (
@@ -26,7 +35,7 @@ const Filters = ({
                   <input 
                     type="checkbox" 
                     value={item} 
-                    class="me-2"
+                    className="me-2"
                     onChange={(e) => {
                       updateFilterValues(
                         name,
@@ -39,7 +48,7 @@ const Filters = ({
               </li>
             ))}
           </ul>
-        </Fragment>
+        </div>
       ))}
     </>
   )
