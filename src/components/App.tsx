@@ -3,6 +3,7 @@ import { useMediaQuery } from 'react-responsive'
 import Card from "./Card"
 import Filters from "./Filters"
 import productList from "../products"
+import NavBar from "./Navbar"
 
 const App = () => {
   const [firstRender, setFirstRender] = useState(true)
@@ -89,6 +90,9 @@ const App = () => {
 
   return (
     <div>
+      <header>
+        <NavBar />
+      </header>
       <div className={css.container}>
         <aside 
           className={css.aside}
@@ -97,6 +101,11 @@ const App = () => {
           }}
         >
           <section>
+            <form className="d-flex mb-4" role="search">
+              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+              <button className="btn btn-outline-success" type="submit">Search</button>
+            </form>
+
             <Filters 
               filters={filters} 
               getFilter={getFilter}
@@ -116,18 +125,19 @@ const App = () => {
               thumbnail,
               description
             }) => 
-              <Card 
-                title={title}
-                image={thumbnail}
-                description={description}
-                className={css.productItem}
-                style={{
-                  width: isDesktop ? "31%" : "100%",
-                  margin: isDesktop ? "0 1%" : ""
-                }}
-                isDesktop={isDesktop}
-                key={title}
-              />
+              <Fragment key={title}>
+                <Card 
+                  title={title}
+                  image={thumbnail}
+                  description={description}
+                  className={css.productItem}
+                  style={{
+                    width: isDesktop ? "31%" : "100%",
+                    margin: isDesktop ? "0 1%" : ""
+                  }}
+                  isDesktop={isDesktop}
+                />
+              </Fragment>
             ): <h2>No products for the giving filters</h2>}
           </ul>
         </main>
