@@ -1,16 +1,23 @@
 import React, { useState, useEffect, Fragment } from "react"
 import { useMediaQuery } from 'react-responsive'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import Card from "./Card"
 import Filters from "./Filters"
 import productList from "../products"
 import NavBar from "./Navbar"
+import Cart from "./Cart"
+
+interface IProduct {
+  title: string
+  thumbnail: string
+  description: string
+}
 
 const App = () => {
   const [firstRender, setFirstRender] = useState(true)
-  const isDesktop = useMediaQuery({
-    query: '(min-width: 1000px)'
-  })
-  const [products, setProducts] = useState([...productList])
+  const [products, setProducts] = useState<IProduct[]>([...productList])
+  const [productsInCart, setProductsInCart] = useState([])
   const [filters, setFilters] = useState([
     {
       name: "category",
@@ -21,6 +28,19 @@ const App = () => {
       values: []
     },
   ])
+  const isDesktop = useMediaQuery({
+    query: '(min-width: 1000px)'
+  })
+
+  const MySwal = withReactContent(Swal)
+
+  const showAlert = (title: string) => {
+    MySwal.fire({
+      title,
+      icon: 'warning',
+      showConfirmButton: false,
+    })
+  }
 
   const css = {
     container: `d-flex ${isDesktop ? "flex-row" : "flex-column"}`,
@@ -78,6 +98,18 @@ const App = () => {
     setProducts(filteredProducts)
   }
 
+  const isAlreadyAddedProduct = (productTitle: string) => {
+    return productsInCart.some(item => item.title === productTitle)
+  }
+
+  const addToCart = (product: IProduct) => {
+    if(!isAlreadyAddedProduct(product.title)){
+      setProductsInCart([...productsInCart, product])
+    } else {
+      showAlert("Product already added to cart")
+    }
+  }
+
   useEffect(() => {
     setFirstRender(false)
   }, [])
@@ -91,7 +123,9 @@ const App = () => {
   return (
     <div>
       <header>
-        <NavBar />
+        <NavBar 
+          cartComponent={<Cart products={productsInCart}/>}
+        />
       </header>
       <div className={css.container}>
         <aside 
@@ -120,24 +154,28 @@ const App = () => {
           }}
         >
           <ul className={css.productList}>
-            {products.length ? products.map(({
-              title,
-              thumbnail,
-              description
-            }) => 
-              <Fragment key={title}>
-                <Card 
-                  title={title}
-                  image={thumbnail}
-                  description={description}
-                  className={css.productItem}
-                  style={{
-                    width: isDesktop ? "31%" : "100%",
-                    margin: isDesktop ? "0 1%" : ""
-                  }}
-                  isDesktop={isDesktop}
-                />
-              </Fragment>
+            {products.length ? products.map((product) => {
+              const { title, thumbnail, description } = product
+              
+              return (
+                <Fragment key={title}>
+                  <Card 
+                    title={title}
+                    image={thumbnail}
+                    description={description}
+                    className={css.productItem}
+                    style={{
+                      width: isDesktop ? "31%" : "100%",
+                      margin: isDesktop ? "0 1%" : ""
+                    }}
+                    isDesktop={isDesktop}
+                    addToCart={() => {
+                      addToCart({ ...product })
+                    }}
+                  />
+                </Fragment>
+              )
+            }
             ): <h2>No products for the giving filters</h2>}
           </ul>
         </main>

@@ -7,6 +7,7 @@ interface ICard {
   className?: string
   style?: any
   isDesktop: boolean
+  addToCart: () => void
 }
 
 const Card = ({ 
@@ -15,7 +16,8 @@ const Card = ({
   description,
   className,
   style,
-  isDesktop
+  isDesktop,
+  addToCart
 }: ICard) => {
   return (
     <div className={`card ${className}`} style={style}>
@@ -32,7 +34,7 @@ const Card = ({
 
       <div className="card-footer">
         <a href="#" className="btn btn-primary me-2">Buy now</a>
-        <a href="#" className="btn btn-success">Add to cart</a>
+        <button onClick={addToCart} className="btn btn-success">Add to cart</button>
       </div>
     </div>
   )
