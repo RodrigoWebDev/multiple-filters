@@ -1,12 +1,8 @@
-import React, { useState, useEffect, Fragment } from "react"
+import { useState, useEffect } from "react"
 import { useMediaQuery } from 'react-responsive'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import Card from "./Card"
-import Filters from "./Filters"
-import productList from "../products"
-import NavBar from "./Navbar"
-import Cart from "./Cart"
+import productList from "../../products"
 
 interface IProduct {
   title: string
@@ -14,7 +10,7 @@ interface IProduct {
   description: string
 }
 
-const App = () => {
+const useApp = () => {
   const [firstRender, setFirstRender] = useState(true)
   const [products, setProducts] = useState<IProduct[]>([...productList])
   const [productsInCart, setProductsInCart] = useState([])
@@ -34,11 +30,30 @@ const App = () => {
 
   const MySwal = withReactContent(Swal)
 
+  const Toast = MySwal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+
   const showAlert = (title: string) => {
     MySwal.fire({
       title,
       icon: 'warning',
       showConfirmButton: false,
+    })
+  }
+
+  const showToast = (title: string) => {
+    Toast.fire({
+      icon: 'success',
+      title
     })
   }
 
@@ -105,6 +120,7 @@ const App = () => {
   const addToCart = (product: IProduct) => {
     if(!isAlreadyAddedProduct(product.title)){
       setProductsInCart([...productsInCart, product])
+      showToast("Product added to cart")
     } else {
       showAlert("Product already added to cart")
     }
@@ -120,73 +136,16 @@ const App = () => {
     }
   }, [filters])
 
-  return (
-    <div>
-      <header>
-        <NavBar 
-          cartComponent={<Cart products={productsInCart}/>}
-        />
-      </header>
-      <div className={css.container}>
-        <aside 
-          className={css.aside}
-          style={{
-            width: isDesktop ? "30%" : "100%"
-          }}
-        >
-          <section>
-            <form className="d-flex mb-4" role="search">
-              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-outline-success" type="submit">Search</button>
-            </form>
-
-            <Filters 
-              filters={filters} 
-              getFilter={getFilter}
-              updateFilterValues={updateFilterValues}
-            /> 
-          </section>
-        </aside>
-
-        <main
-          style={{
-            width: isDesktop ? "70%" : "100%"
-          }}
-        >
-          <ul className={css.productList}>
-            {products.length ? products.map((product) => {
-              const { title, thumbnail, description } = product
-              
-              return (
-                <Fragment key={title}>
-                  <Card 
-                    title={title}
-                    image={thumbnail}
-                    description={description}
-                    className={css.productItem}
-                    style={{
-                      width: isDesktop ? "31%" : "100%",
-                      margin: isDesktop ? "0 1%" : ""
-                    }}
-                    isDesktop={isDesktop}
-                    addToCart={() => {
-                      addToCart({ ...product })
-                    }}
-                  />
-                </Fragment>
-              )
-            }
-            ): <h2>No products for the giving filters</h2>}
-          </ul>
-        </main>
-      </div>
-
-      <hr />
-      <footer className="text-center">
-        Made by <a className="link-primary" href="https://github.com/RodrigoWebDev" target="_blank">Rodrigo Queiroz</a>, source code at <a className="link-primary" href="https://github.com/RodrigoWebDev/multiple-filters" target="_blank">GitHub</a>
-      </footer>
-    </div>
-  )
+  return {
+    productsInCart,
+    css,
+    isDesktop,
+    filters,
+    getFilter,
+    updateFilterValues,
+    products,
+    addToCart
+  }
 }
 
-export default App
+export default useApp
