@@ -3,13 +3,7 @@ import { useMediaQuery } from 'react-responsive'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import productList from "../../products"
-
-interface IProduct {
-  title: string
-  thumbnail: string
-  description: string
-  price: number
-}
+import { IProduct } from "../../interfaces/interfaces"
 
 const useApp = () => {
   const [firstRender, setFirstRender] = useState(true)
@@ -120,11 +114,37 @@ const useApp = () => {
 
   const addToCart = (product: IProduct) => {
     if(!isAlreadyAddedProduct(product.title)){
-      setProductsInCart([...productsInCart, product])
+      setProductsInCart([
+        ...productsInCart, 
+        {
+          ...product,
+          quantity: 1
+        }
+      ])
       showToast("Product added to cart")
     } else {
       showAlert("Product already added to cart")
     }
+  }
+
+  const calculateTotal = () => {
+    const prices = productsInCart.map(item => item.price)
+    if(prices.length){
+      return prices.reduce((total, num) => total + num)
+    }
+  }
+
+  const incrementCartProduct = (productTitle: string) => {
+    const newProducts = productsInCart.map(item => {
+      return {
+        ...item,
+        quantity: item.title === productTitle ? item.quantity + 1 : item.quantity
+      }
+    })
+
+    debugger
+
+    setProductsInCart(newProducts)
   }
 
   useEffect(() => {
@@ -145,7 +165,10 @@ const useApp = () => {
     getFilter,
     updateFilterValues,
     products,
-    addToCart
+    addToCart,
+    calculateTotal,
+    incrementCartProduct
+   /*  incrementCartProduct */
   }
 }
 

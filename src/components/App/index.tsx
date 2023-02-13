@@ -3,6 +3,7 @@ import Card from "../Card"
 import Filters from "../Filters"
 import NavBar from "../Navbar"
 import Cart from "../Cart"
+import CartInner from "../CartInner/index"
 import useApp from "./hook"
 import { formatNumberToCurrency } from "../../utils/index"
 
@@ -15,14 +16,33 @@ const App = () => {
     getFilter,
     updateFilterValues,
     products,
-    addToCart
+    addToCart,
+    calculateTotal,
+    incrementCartProduct
   } = useApp()
   
   return (
     <div>
       <header>
         <NavBar 
-          cartComponent={<Cart products={productsInCart}/>}
+          cartComponent={
+            <Cart 
+              cartInner={
+                <CartInner 
+                  products={productsInCart} 
+                  increment={incrementCartProduct}
+                  total={calculateTotal()}
+                />
+              }
+              /* handleQuantityComponent={(quantity: number) => {
+                return <div>
+                  <button>-</button>
+                  <div>{quantity}</div>
+                  <button>+</button>
+              </div>
+              }} */
+            />
+          }
         />
       </header>
       <div className={css.container}>
