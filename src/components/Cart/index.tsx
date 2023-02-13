@@ -3,6 +3,7 @@ import CartIcon from "../Icons/Cart/index"
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Card from "../Card/index"
+import { formatNumberToCurrency } from "../../utils/index"
 
 const CartInner = ({ products, total }) => {
   return (
@@ -25,13 +26,14 @@ const CartInner = ({ products, total }) => {
                       {title}
                     </div>
                   )}
+                  bodyClassNme="text-start"
                 />
               </Fragment>
             ))
           }
           <hr />
           <div>
-            $ {total}
+            {formatNumberToCurrency(total)}
           </div>
         </div>
       )}
@@ -49,12 +51,10 @@ const Cart = ({ products }) => {
     }
   }
 
-  console.log("calculateTotal", calculateTotal())
-
   const showCart = () => {
     MySwal.fire({
       position: 'top-end',
-      html: <CartInner products={products}/>,
+      html: <CartInner products={products} total={calculateTotal()}/>,
       showConfirmButton: false,
     })
   }

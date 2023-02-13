@@ -4,6 +4,7 @@ import Filters from "../Filters"
 import NavBar from "../Navbar"
 import Cart from "../Cart"
 import useApp from "./hook"
+import { formatNumberToCurrency } from "../../utils/index"
 
 const App = () => {
   const {
@@ -52,7 +53,7 @@ const App = () => {
         >
           <ul className={css.productList}>
             {products.length ? products.map((product) => {
-              const { title, thumbnail, description } = product
+              const { title, thumbnail, description, price } = product
               
               return (
                 <Fragment key={title}>
@@ -72,6 +73,7 @@ const App = () => {
                       <>
                         <h5 className="card-title">{title}</h5>
                         <p className="card-text">{description}</p>
+                        <div className="fs-5"><strong>{formatNumberToCurrency(price)}</strong></div>
                       </>
                     )}
                     footer={(
